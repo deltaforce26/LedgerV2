@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using LedgerV2.Data;
 
 namespace LedgerV2
 {
@@ -6,6 +9,8 @@ namespace LedgerV2
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<LedgerV2Context>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("LedgerV2Context") ?? throw new InvalidOperationException("Connection string 'LedgerV2Context' not found.")));
 
             // Add services to the container.
 

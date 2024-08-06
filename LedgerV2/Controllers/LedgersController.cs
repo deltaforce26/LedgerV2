@@ -91,12 +91,12 @@ namespace LedgerV2.Controllers
         [HttpDelete]
         public async Task<IActionResult> RemoveUser(int userId, int ledgerId)
         {
-            var ledger = await _context.Ledger.FirstAsync(l => l.Id == ledgerId);
+            var ledger = await _context.Ledger.Include(l => l.Users).FirstAsync(l => l.Id == ledgerId);
             var user = await _context.User.FirstAsync(u => u.Id == userId);
             if (user != null && ledger != null)
             {
                 ledger.Users.Remove(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return NoContent();
             }
 
